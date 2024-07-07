@@ -7,7 +7,7 @@ class UserRepository {
             return user;
         } catch (error) {
             console.log("Something went wrong in user-repository");
-            throw {error};
+            throw error;
         }
     }
 
@@ -21,7 +21,7 @@ class UserRepository {
             return true;
         } catch (error) {
             console.log("Something went wrong in user-repository");
-            throw {error};
+            throw error;
         }
     }    
     
@@ -33,7 +33,21 @@ class UserRepository {
             return user;
         } catch (error) {
             console.log("Something went wrong in user-repository");
-            throw {error};
+            throw error;
+        }
+    }
+
+    async getByEmail(userEmail) {
+        try {
+            const user = await User.findOne({
+                where: {
+                    email: userEmail
+                }
+            }); 
+            return user;
+        } catch (error) {
+            console.log("Something went wrong in user-repository");
+            throw error;
         }
     }
 }

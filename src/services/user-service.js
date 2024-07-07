@@ -17,7 +17,24 @@ class UserService {
             return user;
         } catch (error) {
             console.log("Something went wrong in user-service");
-            throw {error};
+            throw error;
+        }
+    }
+    
+    async login(email, plainPassword) {
+        try {
+            const user = await this.UserRepository.getByEmail(email);
+            const passwordMatch = this.checkPassword(plainPassword, user.password);
+            if (!passwordMatch) {
+                console.log("Passwords don't match");
+                throw { error: "Incorrect password" }
+            }
+            
+            const newJWT = this.createToken({ email: user.email, id: user.id });
+            return newJWT; 
+        } catch (error) {
+            console.log("Something went wrong in user-service login");
+            throw error;
         }
     }
     
@@ -27,7 +44,7 @@ class UserService {
             return result;
         } catch (error) {
             console.log("Something went wrong in user-service token-creation");
-            throw {error};
+            throw error;
         }
     }
     
@@ -37,7 +54,7 @@ class UserService {
             return response;
         } catch (error) {
             console.log("Something went wrong in user-service token-verification");
-            throw {error};
+            throw error;
         }
     }
     
@@ -46,7 +63,7 @@ class UserService {
             return bcrypt.compareSync(userInputPlainPassword, encryptedPassword);
         } catch (error) {
             console.log("Something went wrong in user-service password-verification");
-            throw {error};
+            throw error;
         }
     }
 }
