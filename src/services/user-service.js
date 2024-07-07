@@ -31,7 +31,7 @@ class UserService {
             }
             
             const newJWT = this.createToken({ email: user.email, id: user.id });
-            return newJWT; 
+            return { token: newJWT }; 
         } catch (error) {
             console.log("Something went wrong in user-service login");
             throw error;
