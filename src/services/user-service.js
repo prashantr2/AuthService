@@ -5,12 +5,12 @@ const { JWT_KEY } = require('../config/serverConfig');
 
 class UserService {
     constructor() {
-        this.UserRepository = new UserRepository();
+        this.userRepository = new UserRepository();
     }
     
     async create(data) {
         try {
-            const user = await this.UserRepository.create({
+            const user = await this.userRepository.create({
                 email: data.email,
                 password: data.password,
             }); 
@@ -23,7 +23,7 @@ class UserService {
     
     async login(email, plainPassword) {
         try {
-            const user = await this.UserRepository.getByEmail(email);
+            const user = await this.userRepository.getByEmail(email);
             const passwordMatch = this.checkPassword(plainPassword, user.password);
             if (!passwordMatch) {
                 console.log("Passwords don't match");
@@ -38,6 +38,24 @@ class UserService {
         }
     }
     
+    async isAuthenticated(token) {
+        try {
+            const response = this.verifyToken(token);
+            if (!response) {
+                throw { error: 'Invalid Token' }
+            }
+            const user = this.userRepository.getById(response.id);
+            if (!user) {
+                throw { error: 'No user with the token exists' }
+            }
+            return user.id;
+        } catch (error) {
+            console.log(error);
+            console.log("Something went wrong in user-service");
+            throw error;
+        }
+    }
+
     createToken(user) {
         try {
             const result = jwt.sign(user, JWT_KEY, { expiresIn: '1h' });
