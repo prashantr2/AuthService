@@ -29,12 +29,11 @@ const login = async(req, res) => {
             data: response
         });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({
+        return res.status(error.statusCode).json({
             data: {},
             sucess: false,
-            msg: "Something went wrong",
-            error: error
+            msg: error.msg,
+            error: error.explanation
         })
     }
 }

@@ -1,5 +1,7 @@
 const { User, Role } = require('../models/index');
 const ValidationError = require('../utils/validation-error');
+const ClientError = require('../utils/client-error');
+const { StatusCodes } = require('http-status-codes');
 
 class UserRepository {
     async create(data) {
@@ -50,6 +52,14 @@ class UserRepository {
                     email: userEmail
                 }
             }); 
+            if (!user) {
+                throw new ClientError(
+                    'EmailOrPasswordNotFound',
+                    'Invalid email or password',
+                    'Please check your email or password',
+                    StatusCodes.NOT_FOUND
+                );
+            }
             return user;
         } catch (error) {
             console.log("Something went wrong in user-repository");
