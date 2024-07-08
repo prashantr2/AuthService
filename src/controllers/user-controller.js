@@ -11,11 +11,11 @@ const signup = async(req, res) => {
             data: user,
         });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({
+        return res.status(error.statusCode).json({
+            error: error.msg,
             data: {},
             sucess: false,
-            msg: "Something went wrong",
+            explanation: error.explanation
         })
     }
 }
@@ -60,8 +60,29 @@ const isAuthenticated = async(req, res) => {
     }
 }
 
+const isAdmin = async(req, res) => {
+    try {
+        const response = await userService.isAdmin(req.body.id);
+        return res.status(200).json({
+            sucess: true,
+            error: {},
+            data: response,
+            msg: "Successfully fetched whether user is admin or not"
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            data: {},
+            sucess: false,
+            msg: "Something went wrong",
+            error: error
+        })
+    }
+}
+
 module.exports = {
     signup,
     login,
     isAuthenticated,
+    isAdmin,
 }
