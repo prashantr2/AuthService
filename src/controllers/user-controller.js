@@ -6,7 +6,7 @@ const signup = async(req, res) => {
     try {
         const user = await userService.create(req.body); 
         return res.status(201).json({
-            sucess: true,
+            success: true,
             msg: "Successfully created a user",
             data: user,
         });
@@ -14,7 +14,7 @@ const signup = async(req, res) => {
         return res.status(error.statusCode).json({
             error: error.msg,
             data: {},
-            sucess: false,
+            success: false,
             explanation: error.explanation
         })
     }
@@ -24,14 +24,14 @@ const login = async(req, res) => {
     try {
         const response = await userService.login(req.body.email, req.body.password);
         return res.status(200).json({
-            sucess: true,
+            success: true,
             msg: "Successfully logged in",
             data: response
         });
     } catch (error) {
         return res.status(error.statusCode).json({
             data: {},
-            sucess: false,
+            success: false,
             msg: error.msg,
             error: error.explanation
         })
@@ -43,7 +43,7 @@ const isAuthenticated = async(req, res) => {
         const token = req.headers['x-access-token'];
         const response = await userService.isAuthenticated(token);
         return res.status(200).json({
-            sucess: true,
+            success: true,
             error: {},
             data: response,
             msg: "User is authenticated and token is valid"
@@ -52,7 +52,7 @@ const isAuthenticated = async(req, res) => {
         console.log(error);
         return res.status(500).json({
             data: {},
-            sucess: false,
+            success: false,
             msg: "Something went wrong",
             error: error
         })
@@ -63,7 +63,7 @@ const isAdmin = async(req, res) => {
     try {
         const response = await userService.isAdmin(req.body.id);
         return res.status(200).json({
-            sucess: true,
+            success: true,
             error: {},
             data: response,
             msg: "Successfully fetched whether user is admin or not"
@@ -72,7 +72,7 @@ const isAdmin = async(req, res) => {
         console.log(error);
         return res.status(500).json({
             data: {},
-            sucess: false,
+            success: false,
             msg: "Something went wrong",
             error: error
         })
